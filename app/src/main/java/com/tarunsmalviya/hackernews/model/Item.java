@@ -12,8 +12,10 @@ public class Item extends RealmObject {
     @PrimaryKey
     private int id;
 
-    private int parent;
-    private String type, by, time, text;
+    private int parent, score,synced;
+    private long timestamp;
+    private String type, by, title, text, url;
+    private Boolean isTopItem, isNewItem, isBestItem;
     private RealmList<Integer> kids;
 
     public int getId() {
@@ -48,12 +50,20 @@ public class Item extends RealmObject {
         this.by = by;
     }
 
-    public String getTime() {
-        return time;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getText() {
@@ -62,6 +72,54 @@ public class Item extends RealmObject {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Boolean getTopItem() {
+        return isTopItem;
+    }
+
+    public void setTopItem(Boolean topItem) {
+        isTopItem = topItem;
+    }
+
+    public Boolean getNewItem() {
+        return isNewItem;
+    }
+
+    public void setNewItem(Boolean newItem) {
+        isNewItem = newItem;
+    }
+
+    public Boolean getBestItem() {
+        return isBestItem;
+    }
+
+    public void setBestItem(Boolean bestItem) {
+        isBestItem = bestItem;
+    }
+
+    public int getSynced() {
+        return synced;
+    }
+
+    public void setSynced(int synced) {
+        this.synced = synced;
     }
 
     public RealmList<Integer> getKids() {

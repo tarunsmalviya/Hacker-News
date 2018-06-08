@@ -1,5 +1,6 @@
 package com.tarunsmalviya.hackernews.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,11 +14,15 @@ import android.view.ViewGroup;
 import com.tarunsmalviya.hackernews.R;
 import com.tarunsmalviya.hackernews.adapter.ListAdapter;
 import com.tarunsmalviya.hackernews.model.Item;
+import com.tarunsmalviya.hackernews.network.SyncItemList;
+import com.tarunsmalviya.hackernews.util.CommonFunction;
 import com.tarunsmalviya.hackernews.util.ListType;
 
 import javax.annotation.Nullable;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class ListFragment extends Fragment {
 
@@ -54,8 +59,19 @@ public class ListFragment extends Fragment {
     }
 
     public void init() {
-        adapter = new ListAdapter(Realm.getDefaultInstance().where(Item.class).findAll());
+        adapter = new ListAdapter(getContext(), getList());
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+    }
+
+    private RealmResults getList() {
+        String field = (getType() == ListType.TOP_STORIES ? "isTopItem" : (getType() == ListType.NEW_STORIES ? "isNewItem" : "isBestItem"));
+        return Realm.getDefaultInstance().where(Item.class).equalTo(field, true).sort("timestamp", Sort.DESCENDING).findAll();
+    }
+
+    public ListType getType() {
+        if (null != getArguments())
+            return (ListType) getArguments().getSerializable(ARG_TYPE);
+        else return null;
     }
 
     @Override
@@ -76,13 +92,6 @@ public class ListFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recycle_view);
     }
 
-
-    public ListType getType() {
-        if (null != getArguments())
-            return (ListType) getArguments().getSerializable(ARG_TYPE);
-        else return null;
-    }
-
     public void setUpRecycleView() {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -92,5 +101,8 @@ public class ListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Intent intent = new Intent(getActivity(), SyncItemList.class);
+        intent.putExtra(ARG_TYPE, getType());
+        getActivity().startService(intent);
     }
 }

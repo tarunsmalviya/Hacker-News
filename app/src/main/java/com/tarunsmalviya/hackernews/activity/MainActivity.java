@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import com.tarunsmalviya.hackernews.adapter.MainPagerAdapter;
 import com.tarunsmalviya.hackernews.model.Item;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,22 +36,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void execute(Realm realm) {
                 Realm.getDefaultInstance().delete(Item.class);
-            }
-        });
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        int i = (int) System.currentTimeMillis() % 1000;
-                        Item item = realm.createObject(Item.class, i);
-                        item.setText("John Doe" + i);
-                    }
-                });
             }
         });
     }

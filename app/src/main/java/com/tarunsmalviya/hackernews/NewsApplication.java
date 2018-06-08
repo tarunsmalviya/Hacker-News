@@ -1,9 +1,14 @@
 package com.tarunsmalviya.hackernews;
 
 import android.app.Application;
+import android.util.Log;
 
+import com.tarunsmalviya.hackernews.model.Item;
+
+import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmMigration;
 
 public class NewsApplication extends Application {
 
